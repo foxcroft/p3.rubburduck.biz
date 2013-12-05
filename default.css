@@ -1,0 +1,64 @@
+body
+{
+	margin-left: 20px;
+	margin-top: 20px;
+	font-family: Courier;
+}
+
+.square
+{
+	width: 50px;
+	height: 50px;
+	margin: 2px;
+	float: left;
+	color: #99FF11;
+	font-family:Verdana, Geneva, sans-serif;
+	text-align: center;
+	vertical-align: 50%;
+}
+
+.water
+{
+	background-color: #FFFF11;
+}
+
+#message {
+	font-family: Courier;
+	color: #FF3333;
+	margin-left: 100px;
+}
+
+button {
+	color: blue;
+}
+
+#buttons {
+	margin-left: 80px;
+	width: 320px;
+	border: 1px solid blue;
+	text-align: center;
+}
+
+#frame {
+	width: 1000px;
+	margin: 0px auto;
+	border: 1px solid green;
+}
+
+#board {
+	width: 500px;
+	margin-left: 25px;
+	margin-right: 50px;
+	float: left;
+}
+
+#stats {
+	width: 400px;
+	float: left;
+	padding-right: 25px;
+}
+
+#defense_left {
+	color: #99FF11;
+	font-weight: bold;
+}
