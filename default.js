@@ -24,6 +24,8 @@ var duck_array = Array(
 	5
 );
 
+var my_ducks = count_ducks(duck_array);
+
 var color_array = Array(
 	'#9900CC',
 	'#99FF11',
@@ -77,11 +79,10 @@ function reveal_ducks() {
 
 // add duck class to certain squares
 $('#hide').click(function() {
-	console.log("HIDE CLICKED");
+	$('#message').html('&nbsp;');
 
 	if (ducks_hidden == "TRUE") {
 		$('#message').html("You already hid them...");
-		console.log('You already hid them...');
 	}
 	else {
 		hide_ducks(0);
@@ -104,11 +105,9 @@ function hide_ducks(badelynge_index) {
 
 	// if orientation generates to 0, place ducks horizontally.
 	if (orientation == 0) {
-		console.log('orientation is horizontal');
 		horizontal_duck(chain_length, duck_color);
 	}
 	else if (orientation == 1) {
-		console.log('orientation is vertical');
 		vertical_duck(chain_length, duck_color);
 	}
 
@@ -117,13 +116,11 @@ function hide_ducks(badelynge_index) {
 
 
 function horizontal_duck(chain_length, duck_color) {
-	console.log("Chain length = " + chain_length);
 
 	// select the row
 	function set_row() {
 		var row_index = Math.floor( (Math.random() * grid_height) + 0);
 		var row = row_array[row_index];
-		console.log("start on row " + row);
 	
 		return row;
 	}
@@ -140,23 +137,18 @@ function horizontal_duck(chain_length, duck_color) {
 
 		for (var j = 1; j <= grid_width; j++) {
 			var square_class = $('#' + row + j).attr('class');
-			console.log('OPEN SQRS: class is ' + square_class);
 			var is_a_duck = check_square(square_class);
-			console.log ("CHECKING OPEN SQUARES: is_a_duck for " + row + j + " = " + is_a_duck);
 
 			if (is_a_duck == "NO") {
 				open_squares++;
-				console.log("OPEN SQUARES: " + open_squares);
 			}
 		}
 
 		if (open_squares < chain_length) {
-			console.log("Not enough squares in " + row);
 			row = set_row();
 			open_squares = 0;
 		}
 		else {
-			console.log("row " + row + " has enough space");
 			row_open = "TRUE";
 		}
 
@@ -165,11 +157,9 @@ function horizontal_duck(chain_length, duck_color) {
 
 	// determine which squares it can start on
 	var start_range = open_squares - (chain_length - 1);
-	console.log("Start on Square 1 through " + (start_range) );
 
 	// randomly select the starting square
 	var start_square = Math.floor( (Math.random() * start_range) + 1 );
-	console.log("Starting Square is " + (start_square) );
 
 	// set all the ducks down
 	for (var j = start_square; j < (start_square + chain_length) ; j++) {
@@ -177,12 +167,10 @@ function horizontal_duck(chain_length, duck_color) {
 		var square_class = $('#' + row + j).attr('class');
 
 		if (check_square(square_class) == "NO") {
-			console.log("Setting a duck at: " + row + j);
 			$('#' + row + j).removeClass("open").addClass("target").addClass(duck_color);
 		}
 		else {
 			start_square++;
-			console.log("Can't set a duck at: " + row + j);
 		}
 
 	}
@@ -191,8 +179,6 @@ function horizontal_duck(chain_length, duck_color) {
 
 
 function vertical_duck(chain_length, duck_color) {
-	console.log("Chain length = " + chain_length);
-
 
 	// select the column
 	function set_col() {
@@ -214,23 +200,18 @@ function vertical_duck(chain_length, duck_color) {
 
 		for (var i = 0; i < grid_height; i++) {
 			var square_class = $('#' + row_array[i] + col).attr('class');
-			console.log('OPEN SQRS: class is ' + square_class);
 			var is_a_duck = check_square(square_class);
-			console.log ("CHECKING OPEN SQUARES: is_a_duck for " + row_array[i] + col + " = " + is_a_duck);
 
 			if (is_a_duck == "NO") {
 				open_squares++;
-				console.log("OPEN SQUARES: " + open_squares);
 			}
 		}
 
 		if (open_squares < chain_length) {
-			console.log("Not enough squares in column " + col);
 			col = set_col();
 			open_squares = 0;
 		}
 		else {
-			console.log("Column " + col + " has enough space");
 			col_open = "TRUE";
 		}
 
@@ -238,11 +219,9 @@ function vertical_duck(chain_length, duck_color) {
 
 	// determine which squares it can start on
 	var start_range = open_squares - (chain_length - 1);
-	console.log("Start on Square A through " + row_array[ (start_range - 1) ]);
 
 	// randomly select the starting square
 	var start_square = Math.floor( (Math.random() * start_range) );
-	console.log("Starting Square is " + (row_array[start_square]) );
 
 	// set all the ducks down
 	for (var i = start_square; i < (start_square + chain_length) ; i++) {
@@ -250,12 +229,10 @@ function vertical_duck(chain_length, duck_color) {
 		var square_class = $('#' + row_array[i] + col).attr('class');
 
 		if (check_square(square_class) == "NO") {
-			console.log("Setting a duck at: " + row_array[i] + col);
 			$('#' + row_array[i] + col).removeClass("open").addClass("target").addClass(duck_color);
 		}
 		else {
 			start_square++;
-			console.log("Can't set a duck at: " + row_array[i] + col);
 		}
 
 	}
@@ -263,17 +240,20 @@ function vertical_duck(chain_length, duck_color) {
 }
 
 
-
 $('.water').click(function() {
 
 	if (ducks_hidden == "FALSE") {
-		console.log("Hide Them Ducks First!");
+		$('#message').html("You've got to tell them ducks to hide first!");
+	}
+	else if (my_ducks == 0) {
+		$('#message').html("You found them first! All the ducks are safe.<br>You can cuddle them in your backyard.");
+	}
+	else if (bann_ducks == 0) {
+		$('#message').html("Ol' Banny already found them all.<br>You lose and he ate them.");
 	}
 	else {
 		var square_id = $(this).attr('id');
-		console.log("id = " + square_id);
 		var square_class = $(this).attr('class');
-		console.log("class = " + square_class);
 		
 		var is_a_duck = check_square(square_class);
 
@@ -281,16 +261,17 @@ $('.water').click(function() {
 		if (is_a_duck == "YES") {
 
 			duck_color = grab_color(square_class);
-			console.log("Found a duck! Color is " + duck_color);
 			$(this).css('background-color', duck_color);
+			my_ducks--;
 		
 		}
 		else {
 		
-			console.log("No ducks here.");
 			$(this).css('background-color','#FF3333');
 		
 		}
+
+		$('#message').html('You still need to find ' + my_ducks + ' ducks');
 
 		check_bann();
 
@@ -359,16 +340,23 @@ function check_bann() {
 			// if there aren't any ducks left in the current badelynge, reset to -1
 			if (bann_array[bann_hit_index] == 0) {
 				bann_hit_index = -1;
+
+				// when he's found a full badelynge, specify which badelynge in the stats
+				$('#bann_status').html('Oh no, he found the last in that chain!<br>Available Squares: ' + available_squares_bann);
+				$('#badelynge_hit').append('Bannigan found a chain of ' + badelynge_hit + ' ducks!<br>');
+			}
+			else {
+				$('#bann_status').html('Bannigan caught another duck!<br>Available Squares: ' + available_squares_bann);
+
 			}
 
 			$('#defense_left').html(bann_ducks);
-			$('#bann_status').html('Bann hit! AvSq = ' + available_squares_bann);
 
 		}
 		// if he misses, even at 50% (sheesh!)
 		else {
 			available_squares_bann--;
-			$('#bann_status').html('Bann missed! Now hit him where it hurts. AvSq = ' + available_squares_bann);
+			$('#bann_status').html('Bannigan missed! Now hit him hard.<br>Available Squares: ' + available_squares_bann);
 			bann_guesswork--;
 		}
 
@@ -388,13 +376,12 @@ function check_bann() {
 
 		// how many ducks are in the badelynge found?
 		badelynge_hit = bann_array[bann_hit_index];
-		console.log("Badelynge hit: Chain of " + badelynge_hit);
 
 		bann_ducks--;
 		bann_array[bann_hit_index]--;
 		available_squares_bann--;
 		$('#defense_left').html(bann_ducks);
-		$('#bann_status').html('Bann hit! AvSq = ' + available_squares_bann);
+		$('#bann_status').html('Bannigan caught a duck!<br>Available Squares: ' + available_squares_bann);
 
 
 	}
@@ -403,13 +390,25 @@ function check_bann() {
 	// just hit one now, move on
 	else {
 		available_squares_bann--;
-		$('#bann_status').html('Bann missed! Now hit him where it hurts. AvSq = ' + available_squares_bann);
+		$('#bann_status').html('Bannigan missed! Now hit him hard.<br>Available Squares: ' + available_squares_bann);
 	}
 
 	if (bann_ducks == 0) {
 		reveal_ducks();
 	}
 
+
+}
+
+function count_ducks(duck_array) {
+	
+	var tot_ducks = 0;
+
+	for(i in duck_array) {
+		tot_ducks = tot_ducks + duck_array[i];
+	}
+
+	return tot_ducks;
 
 }
 

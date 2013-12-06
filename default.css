@@ -1,8 +1,14 @@
 body
 {
-	margin-left: 20px;
+	margin-left: 10px;
 	margin-top: 20px;
 	font-family: Courier;
+}
+
+h1
+{
+	text-align: center;
+	color: #FFAA11;
 }
 
 .square
@@ -17,6 +23,22 @@ body
 	vertical-align: 50%;
 }
 
+.column
+{
+	position: relative;
+}
+
+.col_content
+{
+	position: absolute;
+	bottom: 0;
+}
+
+.row
+{
+	line-height: 50px;
+}
+
 .water
 {
 	background-color: #FFFF11;
@@ -25,7 +47,7 @@ body
 #message {
 	font-family: Courier;
 	color: #FF3333;
-	margin-left: 100px;
+	text-align: center;
 }
 
 button {
@@ -35,30 +57,58 @@ button {
 #buttons {
 	margin-left: 80px;
 	width: 320px;
-	border: 1px solid blue;
 	text-align: center;
+}
+
+input[type=button] {
+  background-color: #9900CC;
+  border: 1px solid #9900CC;
+  border-radius: 8px;
+  color: #fff;
+  font: bold 11px/1 Tahoma, Geneva, sans-serif;
+  padding: 6px 0 6px 0;
+  position:relative;
+  top:-4px;
+  text-align: center;
+  width: 100px;
 }
 
 #frame {
 	width: 1000px;
 	margin: 0px auto;
-	border: 1px solid green;
+	border: 1px solid white;
 }
 
 #board {
 	width: 500px;
 	margin-left: 25px;
-	margin-right: 50px;
+	margin-right: 25px;
 	float: left;
 }
 
 #stats {
 	width: 400px;
 	float: left;
-	padding-right: 25px;
 }
 
-#defense_left {
+#bann_number
+{
+	width: 75%;
+	height: 42px;
+	float: left;
+}
+
+#defense_left
+{
+	height: 42px;
 	color: #99FF11;
 	font-weight: bold;
+	font-size: 35px;
+	text-align: center;
 }
+
+#badelynge_hit
+{
+	color: #33CCFF;
+}
+
