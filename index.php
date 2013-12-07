@@ -1,8 +1,12 @@
-<DOCTYPE! html>
+<!DOCTYPE html>
 
 <html>
 
 <head>
+
+	<title>Ducks Run Amok</title>
+
+	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
 
 	<link rel="stylesheet" type="text/css" href="default.css">
 
