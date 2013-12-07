@@ -2,6 +2,7 @@ var grid_width = 7;
 var grid_height = 7;
 var grid_size = grid_height * grid_width;
 
+// letters for all possible rows
 var row_array = Array(
 	'a',
 	'b',
@@ -24,15 +25,18 @@ var duck_array = Array(
 	5
 );
 
+// total number of ducks hiding
 var my_ducks = count_ducks(duck_array);
 
+// colors for different badelynges
 var color_array = Array(
-	'#9900CC',
+	'#CC88FF',
 	'#99FF11',
 	'#33CCFF',
 	'#FFAA11'
 );
 
+// bann's ducks
 var bann_array = Array(
 	2,
 	3,
@@ -46,6 +50,7 @@ var badelynge_hit = 0;
 var bann_hit_index = -1;
 var bann_guesswork = 2;
 
+// start afresh, reload the page
 $('#start').click(function() {
 	location.reload();
 });
@@ -53,12 +58,18 @@ $('#start').click(function() {
 //reveal all of the duck locations
 $('#reveal').click(function() {
 
+	if (ducks_hidden == "FALSE") {
+		$('#message').css("color", "#FF3333");
+		$('#message').html("You haven't hidden them yet...");
+	}
 	reveal_ducks();
 
 });
 
+// show the location of all the ducks hidden among the available squares
 function reveal_ducks() {
 
+	// check each square to see if it has the 'target' class
 	for (var i = 0; i < grid_height; i++) {
 		
 		for (var j = 1; j <= grid_width; j++) {
@@ -82,19 +93,22 @@ $('#hide').click(function() {
 	$('#message').html('&nbsp;');
 
 	if (ducks_hidden == "TRUE") {
+		$('#message').css("color", "#FF3333");
 		$('#message').html("You already hid them...");
 	}
 	else {
-		hide_ducks(0);
-		hide_ducks(1);
-		hide_ducks(2);
-		hide_ducks(3);
+		for (i in duck_array) {
+			hide_ducks(i);
+		}
 
 		ducks_hidden = "TRUE";
+
+		$('#message').css("color", "black");
+		$('#message').html("OK, all the ducks are hiding...quick, find them!");
 	}
 });
 
-
+//hide the ducks based on the index in the duck_array
 function hide_ducks(badelynge_index) {
 
 	// determine whether to place the duck horizontally or vertically
@@ -114,7 +128,7 @@ function hide_ducks(badelynge_index) {
 }
 
 
-
+// place a duck among available squares horizontally, if called upon to do so
 function horizontal_duck(chain_length, duck_color) {
 
 	// select the row
@@ -144,6 +158,8 @@ function horizontal_duck(chain_length, duck_color) {
 			}
 		}
 
+		// if there aren't even available squares to fit the full chain length,
+		// then randomly select a different row to test
 		if (open_squares < chain_length) {
 			row = set_row();
 			open_squares = 0;
@@ -166,6 +182,7 @@ function horizontal_duck(chain_length, duck_color) {
 	
 		var square_class = $('#' + row + j).attr('class');
 
+		// if the square being checked doesn't already have a duck in it, set one down
 		if (check_square(square_class) == "NO") {
 			$('#' + row + j).removeClass("open").addClass("target").addClass(duck_color);
 		}
@@ -177,14 +194,13 @@ function horizontal_duck(chain_length, duck_color) {
 
 }
 
-
+// set a chain of ducks down vertically, if called upon to do so
 function vertical_duck(chain_length, duck_color) {
 
 	// select the column
 	function set_col() {
 		var col_index = Math.floor( (Math.random() * grid_width) + 0);
 		var col = col_index + 1;
-		console.log("Column is " + col);
 	
 		return col;
 	}
@@ -207,6 +223,8 @@ function vertical_duck(chain_length, duck_color) {
 			}
 		}
 
+		// if there aren't enough available squares in a column to fit the full chain length,
+		// randomly select a new column to test
 		if (open_squares < chain_length) {
 			col = set_col();
 			open_squares = 0;
@@ -228,6 +246,7 @@ function vertical_duck(chain_length, duck_color) {
 	
 		var square_class = $('#' + row_array[i] + col).attr('class');
 
+		// if the current square doesn't already have a duck in it, set one down
 		if (check_square(square_class) == "NO") {
 			$('#' + row_array[i] + col).removeClass("open").addClass("target").addClass(duck_color);
 		}
@@ -239,18 +258,25 @@ function vertical_duck(chain_length, duck_color) {
 
 }
 
-
+// check what's going on with a certain hiding square, and change its background accordingly
 $('.water').click(function() {
 
+	// if you haven't hidden the ducks yet
 	if (ducks_hidden == "FALSE") {
+		$('#message').css("color", "#FF3333");
 		$('#message').html("You've got to tell them ducks to hide first!");
 	}
+	// if you've already found all the ducks
 	else if (my_ducks == 0) {
+		$('#message').css({"color":"black", "font-weight":"bold"});
 		$('#message').html("You found them first! All the ducks are safe.<br>You can cuddle them in your backyard.");
 	}
+	// if Bannigan has already found all the ducks
 	else if (bann_ducks == 0) {
+		$('#message').css({"color":"black", "font-weight":"bold"});
 		$('#message').html("Ol' Banny already found them all.<br>You lose and he ate them.");
 	}
+	// otherwise, check to see if there is a duck in this hiding square
 	else {
 		var square_id = $(this).attr('id');
 		var square_class = $(this).attr('class');
@@ -263,6 +289,10 @@ $('.water').click(function() {
 			duck_color = grab_color(square_class);
 			$(this).css('background-color', duck_color);
 			my_ducks--;
+
+			if (my_ducks == 0) {
+				$('h1').html("YOU WON!");
+			}
 		
 		}
 		else {
@@ -271,6 +301,7 @@ $('.water').click(function() {
 		
 		}
 
+		$('#message').css("color", "black");
 		$('#message').html('You still need to find ' + my_ducks + ' ducks');
 
 		check_bann();
@@ -279,7 +310,7 @@ $('.water').click(function() {
 
 });
 
-
+// check the square's classes to see if it contains 'target' (meaning a duck is hiding here)
 function check_square(square_class) {
 
 		// split the ID's by the nbsp delimiter
@@ -299,9 +330,10 @@ function check_square(square_class) {
 
 };
 
+//get the color for the hiding duck, which is the last term set in its list of classes
 function grab_color(square_class) {
 
-		// split the ID's by the nbsp delimiter
+		// split the classess by the nbsp delimiter
 		var class_array = square_class.split(" ");
 
 		// set the duck's color to last term in class, which is the background color.
@@ -330,6 +362,7 @@ function check_bann() {
 		// Bann now has 50% chance of finding another duck
 		bann_guess = Math.floor(Math.random() * bann_guesswork);
 
+		// bann_guess = 0 means Bannigan found a duck
 		if (bann_guess == 0) {
 
 			bann_ducks--;
@@ -344,6 +377,12 @@ function check_bann() {
 				// when he's found a full badelynge, specify which badelynge in the stats
 				$('#bann_status').html('Oh no, he found the last in that chain!<br>Available Squares: ' + available_squares_bann);
 				$('#badelynge_hit').append('Bannigan found a chain of ' + badelynge_hit + ' ducks!<br>');
+			
+				// if it was the last duck he needed to find, 
+				//display a losing title caption
+				if (bann_ducks == 0) {
+					$('h1').html("Ol' BANNIGAN WON!");
+				}
 			}
 			else {
 				$('#bann_status').html('Bannigan caught another duck!<br>Available Squares: ' + available_squares_bann);
@@ -400,6 +439,7 @@ function check_bann() {
 
 }
 
+// count how many total ducks are in the array of badelynges
 function count_ducks(duck_array) {
 	
 	var tot_ducks = 0;
